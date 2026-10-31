@@ -1,12 +1,789 @@
-<title>Йцукен Мессенджер</title>
-<h1>Йцукен Мессенджер - мессенджер для WAP устройств</h1>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Йцукен Мессенджер — общайся легко</title>
+  <!-- Font Awesome для иконок -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Сброс и базовые стили */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  
-  <aside id="search-2" class="widget widget_search">
-<form role="search" method="get" class="search-form" action="https://ycukensearch.github.io/me/messages.html">		
-		<label>			
-							<input type="search" class="search-field" placeholder="UIN" value="" name="uin"/>				</label>			
- <input type="submit" class="search-submit" value="Войти!"/>
-</form></aside>
-<a href="new.html">Создать UIN</a>
-<a href="kicq.html">Создать UIN для KICQ</a>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #0b0f1c;
+      color: #eef2ff;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Динамический градиентный фон — теперь с оранжевыми акцентами */
+    .bg-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: radial-gradient(circle at 30% 20%, #2a1e10, #0b0f1c 80%);
+    }
+
+    .bg-glow::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 70% 80%, #7a3d0a, transparent 70%);
+      opacity: 0.5;
+      animation: pulseGlow 12s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.3; transform: scale(1); }
+      100% { opacity: 0.8; transform: scale(1.2); }
+    }
+
+    /* Контейнер */
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Хедер / навигация */
+    .header {
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Логотип — оранжевый */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffb347, #ff7e00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 20px rgba(255, 160, 60, 0.4);
+    }
+
+    .logo i {
+      font-size: 32px;
+      background: linear-gradient(135deg, #ffc857, #ff8c00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.6));
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(255, 160, 60, 0.25);
+      color: #ffd8a8;
+    }
+
+    /* Главный герой (hero) */
+    .hero {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      padding: 20px 0 60px;
+      flex-wrap: wrap;
+    }
+
+    .hero-content {
+      flex: 1 1 400px;
+      max-width: 600px;
+    }
+
+    /* Заголовок — оранжевый */
+    .hero-title {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      background: linear-gradient(to right, #ffd89e, #ffb347, #ff7e00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 30px rgba(255, 160, 60, 0.35));
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #ffc857, #ff7e00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: #c8b8a0;
+      margin-bottom: 40px;
+      max-width: 500px;
+      border-left: 4px solid #ff9e2c;
+      padding-left: 20px;
+    }
+
+    /* Кнопки — оранжевые */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #ffb347, #ff7e00);
+      border: none;
+      border-radius: 60px;
+      padding: 18px 48px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1208;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -8px #ff8c00, 0 0 0 2px rgba(255, 255, 255, 0.1);
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 220, 160, 0.4);
+    }
+
+    .btn-primary i {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 40px -8px #ff7e00, 0 0 0 4px rgba(255, 190, 100, 0.25);
+      background: linear-gradient(135deg, #ffc857, #ff8c00);
+    }
+
+    .btn-primary:hover i {
+      transform: translateX(6px);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    /* Правая часть — рейтинг и активные пользователи */
+    .hero-stats {
+      flex: 1 1 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background: rgba(30, 22, 12, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 160, 60, 0.12);
+      border-radius: 48px;
+      padding: 32px 28px;
+      box-shadow: 0 30px 50px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 140, 0, 0.15);
+    }
+
+    .rating-block {
+      text-align: center;
+    }
+
+    .rating-stars {
+      color: #ffc857;
+      font-size: 28px;
+      letter-spacing: 6px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 12px #ffb34780);
+    }
+
+    .rating-number {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffe6a0, #ff9e2c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1;
+    }
+
+    .rating-label {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #b8a888;
+      margin-top: 8px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #ff9e2c60, #ff7e0060, transparent);
+      margin: 8px 0;
+    }
+
+    .active-users-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 500;
+      color: #e0cfb8;
+      margin-bottom: 16px;
+    }
+
+    .online-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #6ef0a0;
+      font-weight: 600;
+    }
+
+    .online-dot {
+      width: 10px;
+      height: 10px;
+      background: #4cd964;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #4cd964;
+      animation: pulseDot 1.5s infinite;
+    }
+
+    @keyframes pulseDot {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .users-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .users-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .users-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .users-list::-webkit-scrollbar-thumb {
+      background: #ff9e2c;
+      border-radius: 10px;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 40px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .user-item:hover {
+      background: rgba(255, 158, 44, 0.12);
+      border-color: rgba(255, 158, 44, 0.3);
+      transform: translateX(4px);
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: #f5ede0;
+    }
+
+    .user-status {
+      font-size: 12px;
+      color: #a89880;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .user-status i {
+      font-size: 10px;
+      color: #4cd964;
+    }
+
+    /* Преимущества */
+    .features-section {
+      padding: 80px 0;
+    }
+
+    /* Заголовки секций — оранжевые */
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, #ffd89e, #ffb347, #ff7e00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+      filter: drop-shadow(0 0 20px rgba(255, 160, 60, 0.2));
+    }
+
+    .section-sub {
+      text-align: center;
+      color: #a89880;
+      margin-bottom: 56px;
+      font-size: 18px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 28px;
+    }
+
+    .feature-card {
+      background: rgba(30, 22, 12, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 32px;
+      padding: 32px 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 158, 44, 0.4);
+      box-shadow: 0 30px 40px -10px rgba(255, 140, 0, 0.25);
+      background: rgba(40, 30, 18, 0.75);
+    }
+
+    /* Иконки преимуществ — оранжевые */
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffc857, #ff8c00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 12px rgba(255, 160, 60, 0.35));
+    }
+
+    .feature-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #ffe6c0;
+    }
+
+    .feature-desc {
+      color: #b8a888;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Отзывы */
+    .testimonials-section {
+      padding: 60px 0 100px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .testimonial-card {
+      background: rgba(30, 22, 12, 0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 32px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(255, 158, 44, 0.5);
+      background: rgba(40, 30, 18, 0.75);
+      box-shadow: 0 20px 30px -10px #ff7e0040;
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .testimonial-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 20px;
+      color: white;
+    }
+
+    .testimonial-name {
+      font-weight: 700;
+      font-size: 18px;
+      color: #f5ede0;
+    }
+
+    .testimonial-role {
+      font-size: 13px;
+      color: #a89880;
+    }
+
+    .testimonial-stars {
+      color: #ffc857;
+      font-size: 16px;
+      letter-spacing: 3px;
+      margin: 8px 0 4px;
+      filter: drop-shadow(0 0 8px #ffb34760);
+    }
+
+    .testimonial-text {
+      color: #d8c8b0;
+      font-size: 15px;
+      line-height: 1.7;
+      font-style: italic;
+      flex: 1;
+    }
+
+    /* CTA снизу */
+    .cta-bottom {
+      text-align: center;
+      padding: 40px 0 100px;
+    }
+
+    /* Футер */
+    .footer {
+      margin-top: auto;
+      padding: 32px 0;
+      text-align: center;
+      color: #7a6a55;
+      border-top: 1px solid rgba(255, 160, 60, 0.08);
+      font-size: 14px;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 44px;
+      }
+      .hero-sub {
+        font-size: 16px;
+      }
+      .btn-primary {
+        padding: 14px 36px;
+        font-size: 18px;
+        width: 100%;
+      }
+      .hero-stats {
+        padding: 24px 20px;
+      }
+      .rating-number {
+        font-size: 32px;
+      }
+      .section-title {
+        font-size: 28px;
+      }
+      .header {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 16px;
+      }
+      .hero-title {
+        font-size: 36px;
+      }
+      .logo {
+        font-size: 22px;
+      }
+      .logo i {
+        font-size: 26px;
+      }
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Утилиты для цветов аватаров — тоже тёплые/оранжевые оттенки */
+    .avatar-1 { background: linear-gradient(135deg, #ffb347, #ff7e00); }
+    .avatar-2 { background: linear-gradient(135deg, #ff9e2c, #ff6b6b); }
+    .avatar-3 { background: linear-gradient(135deg, #ffc857, #f0a030); }
+    .avatar-4 { background: linear-gradient(135deg, #ff7e00, #d06000); }
+    .avatar-5 { background: linear-gradient(135deg, #f0a030, #c05000); }
+    .avatar-6 { background: linear-gradient(135deg, #ffb347, #e06020); }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <div class="container">
+    <!-- Шапка -->
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-comment-dots"></i>
+        <span>Йцукен</span>
+      </div>
+      <div class="badge">
+        <i class="fas fa-shield-alt" style="margin-right: 8px;"></i> Сквозное шифрование
+      </div>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Мессенджер <span>нового</span> поколения
+        </h1>
+        <p class="hero-sub">
+          Быстрый, безопасный и невероятно удобный. Общайся с друзьями без ограничений.
+        </p>
+        <a href="https://ycukensearch.github.io/me/messages.html" class="btn-primary" id="startBtn">
+          Начать общение <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <!-- Рейтинг -->
+        <div class="rating-block">
+          <div class="rating-stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <div class="rating-number">4.9</div>
+          <div class="rating-label">на основе 12 847 отзывов</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Активные пользователи -->
+        <div>
+          <div class="active-users-header">
+            <span><i class="fas fa-users" style="margin-right: 6px;"></i> Сейчас в сети</span>
+            <span class="online-indicator">
+              <span class="online-dot"></span> 2 483
+            </span>
+          </div>
+          <div class="users-list">
+            <div class="user-item">
+              <div class="user-avatar avatar-1">А</div>
+              <div class="user-info">
+                <div class="user-name">Алексей В.</div>
+                <div class="user-status"><i class="fas fa-circle"></i> в сети</div>
+              </div>
+            </div>
+            <div class="user-item">
+              <div class="user-avatar avatar-2">М</div>
+              <div class="user-info">
+                <div class="user-name">Мария К.</div>
+                <div class="user-status"><i class="fas fa-circle"></i> в сети</div>
+              </div>
+            </div>
+            <div class="user-item">
+              <div class="user-avatar avatar-3">Д</div>
+              <div class="user-info">
+                <div class="user-name">Дмитрий С.</div>
+                <div class="user-status"><i class="fas fa-circle"></i> в сети</div>
+              </div>
+            </div>
+            <div class="user-item">
+              <div class="user-avatar avatar-4">Е</div>
+              <div class="user-info">
+                <div class="user-name">Елена П.</div>
+                <div class="user-status"><i class="fas fa-circle"></i> в сети</div>
+              </div>
+            </div>
+            <div class="user-item">
+              <div class="user-avatar avatar-5">И</div>
+              <div class="user-info">
+                <div class="user-name">Игорь Л.</div>
+                <div class="user-status"><i class="fas fa-circle"></i> в сети</div>
+              </div>
+            </div>
+            <div class="user-item">
+              <div class="user-avatar avatar-6">О</div>
+              <div class="user-info">
+                <div class="user-name">Ольга Р.</div>
+                <div class="user-status"><i class="fas fa-circle"></i> в сети</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section class="features-section">
+      <h2 class="section-title">Почему Йцукен?</h2>
+      <p class="section-sub">Мы создали мессенджер, которым приятно пользоваться каждый день</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <h3 class="feature-title">Молниеносная скорость</h3>
+          <p class="feature-desc">Сообщения доставляются за миллисекунды. Никаких задержек даже при плохом соединении.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-lock"></i></div>
+          <h3 class="feature-title">Сквозное шифрование</h3>
+          <p class="feature-desc">Ваши переписки защищены по последнему слову криптографии. Только вы и получатель.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-palette"></i></div>
+          <h3 class="feature-title">Гибкие темы</h3>
+          <p class="feature-desc">Настраивайте внешний вид под себя: тёмная/светлая тема, кастомные обои и акценты.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <h3 class="feature-title">Безлимитные файлы</h3>
+          <p class="feature-desc">Отправляйте документы, фото и видео до 2 ГБ. Всё хранится в облаке и доступно с любого устройства.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Отзывы -->
+    <section class="testimonials-section">
+      <h2 class="section-title">Что говорят пользователи</h2>
+      <p class="section-sub">Более 2 миллионов человек уже выбрали Йцукен</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar avatar-1">А</div>
+            <div>
+              <div class="testimonial-name">Анна Смирнова</div>
+              <div class="testimonial-role">дизайнер</div>
+            </div>
+          </div>
+          <div class="testimonial-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">«Йцукен — это любовь с первого сообщения! Интерфейс настолько лёгкий и продуманный, что пользоваться одно удовольствие. А шифрование даёт спокойствие.»</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar avatar-4">М</div>
+            <div>
+              <div class="testimonial-name">Максим Орлов</div>
+              <div class="testimonial-role">разработчик</div>
+            </div>
+          </div>
+          <div class="testimonial-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">«Наконец-то мессенджер, который не тормозит и не жрёт батарею. Плюс отправка файлов до 2 ГБ — это просто спасение для работы.»</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar avatar-3">Е</div>
+            <div>
+              <div class="testimonial-name">Екатерина Воронова</div>
+              <div class="testimonial-role">студентка</div>
+            </div>
+          </div>
+          <div class="testimonial-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+          </div>
+          <p class="testimonial-text">«Обожаю простоту использования! Рекомендую всем друзьям.»</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Призыв к действию -->
+    <div class="cta-bottom">
+      <a href="https://ycukensearch.github.io/me/messages.html" class="btn-primary" style="font-size: 22px; padding: 20px 64px;">
+        Начать! <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Футер -->
+  <footer class="footer">
+    <div class="container">
+      © 2026 Разработчики Йцукен. Сделано с любовью к общению.
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Плавное появление страницы
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 0.6s ease';
+        document.body.style.opacity = '1';
+      }, 50);
+
+      // Визуальный отклик на нажатие кнопок
+      const startButtons = document.querySelectorAll('.btn-primary');
+      startButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          this.style.transform = 'scale(0.97)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 150);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
